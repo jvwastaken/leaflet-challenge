@@ -6,6 +6,17 @@ d3.json(url).then(function(data) {
 createFeatures(data.features)
 });
 
+// Determine the color of the circle based on the sig property
+function getColor(sig) {
+  return sig >= 90 ? 'red' :
+     sig >= 70 ? 'orange' :
+     sig >= 50 ? 'yellow' :
+     sig >= 30 ? 'lightgreen' :
+     sig >= 10 ? 'green' :
+      'darkgreen';
+      }
+
+
 function createFeatures(earthquakeData) {
   function onEachFeature(feature, layer) {
     layer.bindPopup(`<h3>${feature.properties.place}</h3><hr>
@@ -16,17 +27,7 @@ function createFeatures(earthquakeData) {
     onEachFeature: onEachFeature,
     pointToLayer: function(feature, latlng) {
       // Determine the size of the circle based on magnitude
-      let radius = feature.properties.mag * 8000;
-
-      // Determine the color of the circle based on the sig property
-      function getColor(sig) {
-        return sig >= 90 ? 'red' :
-               sig >= 70 ? 'orange' :
-               sig >= 50 ? 'yellow' :
-               sig >= 30 ? 'lightgreen' :
-               sig >= 10 ? 'green' :
-               'darkgreen';
-      }
+      let radius = feature.properties.mag * 7000;
 
       let color = getColor(feature.properties.sig);
 
@@ -36,7 +37,7 @@ function createFeatures(earthquakeData) {
         color: 'black',
         weight: 1,
         opacity: 1,
-        fillOpacity: 0.75
+        fillOpacity: 0.5
       });
     }
   });
@@ -71,8 +72,41 @@ function createMap(earthquake) {
     layers: [street, earthquake]
   });
 
+// Set up the legend using grades and colors arrays
+let legend = L.control({ position: "bottomright" });
+legend.onAdd = function() {
+  let div = L.DomUtil.create("div", "info legend");
+  let grades = [0, 10, 30, 50, 70, 90];
+  let colors = ['darkgreen', 'green', 'lightgreen', 'yellow', 'orange', 'red'];
+  let labels = [];
+
+  // Add the legend title
+  let legendInfo = "<h3>Depth</h3>" +
+  "<div class=\"labels\">";
+  div.innerHTML = legendInfo;
+
+  // Create legend labels with color boxes
+  for (let i = 0; i < grades.length; i++) {
+    labels.push(
+      '<li style="background-color:' + colors[i] + '"></li> ' +
+      grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+')
+    );
+  }
+
+  div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+
+   // Set background color of legend box to white
+   div.style.backgroundColor = 'white';
+   
+  return div;
+};
+
+legend.addTo(myMap);
+
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);  
 
 }
+
+
