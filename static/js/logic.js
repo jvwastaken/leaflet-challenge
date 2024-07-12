@@ -20,7 +20,7 @@ function getColor(coords) {
 function createFeatures(earthquakeData) {
   function onEachFeature(feature, layer) {
     layer.bindPopup(`<h3>${feature.properties.place}</h3><hr>
-      Time of Occurrence: ${new Date(feature.properties.time)}<br>Magnitude: ${feature.properties.mag}`);
+      <b>Time of Occurrence:</b> ${new Date(feature.properties.time)}<br><b>Magnitude:</b> ${feature.properties.mag}`);
   }
 
   let earthquake = L.geoJSON(earthquakeData, {
@@ -81,7 +81,7 @@ legend.onAdd = function() {
   let labels = [];
 
   // Add the legend title
-  let legendInfo = "<h3>Depth</h3>" +
+  let legendInfo = "<strong>Depth of Earthquake</strong>" +
   "<div class=\"labels\">";
   div.innerHTML = legendInfo;
 
@@ -94,9 +94,6 @@ legend.onAdd = function() {
   }
 
   div.innerHTML += "<ul>" + labels.join("") + "</ul>";
-
-   // Set background color of legend box to white
-   div.style.backgroundColor = 'white';
    
   return div;
 };
