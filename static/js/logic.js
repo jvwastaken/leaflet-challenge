@@ -20,7 +20,7 @@ function getColor(coords) {
 function createFeatures(earthquakeData) {
   function onEachFeature(feature, layer) {
     layer.bindPopup(`<h3>${feature.properties.place}</h3><hr>
-      <b>Time of Occurrence:</b> ${new Date(feature.properties.time)}<br><b>Magnitude:</b> ${feature.properties.mag}`);
+      <b>Time of Occurrence:</b> ${new Date(feature.properties.time)}<br><b>Magnitude:</b> ${feature.properties.mag}<br><b>Depth:</b> ${feature.geometry.coordinates[2]}`);
   }
 
   let earthquake = L.geoJSON(earthquakeData, {
