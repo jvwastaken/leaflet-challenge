@@ -7,13 +7,13 @@ createFeatures(data.features)
 });
 
 // Determine the color of the circle based on the sig property
-function getColor(sig) {
-  return sig >= 90 ? 'red' :
-     sig >= 70 ? 'orange' :
-     sig >= 50 ? 'yellow' :
-     sig >= 30 ? 'lightgreen' :
-     sig >= 10 ? 'green' :
-      'darkgreen';
+function getColor(coords) {
+  return coords >= 90 ? 'red' :
+  coords >= 70 ? 'orange' :
+  coords >= 50 ? 'gold' :
+  coords >= 30 ? 'greenyellow' :
+  coords >= 10 ? 'lime' :
+      'green';
       }
 
 
@@ -29,7 +29,7 @@ function createFeatures(earthquakeData) {
       // Determine the size of the circle based on magnitude
       let radius = feature.properties.mag * 7000;
 
-      let color = getColor(feature.properties.sig);
+      let color = getColor(feature.geometry.coordinates[2]);
 
       return L.circle(latlng, {
         radius: radius,
@@ -77,7 +77,7 @@ let legend = L.control({ position: "bottomright" });
 legend.onAdd = function() {
   let div = L.DomUtil.create("div", "info legend");
   let grades = [0, 10, 30, 50, 70, 90];
-  let colors = ['darkgreen', 'green', 'lightgreen', 'yellow', 'orange', 'red'];
+  let colors = ['green', 'lime', 'greenyellow', 'gold', 'orange', 'red'];
   let labels = [];
 
   // Add the legend title
